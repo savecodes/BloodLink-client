@@ -6,7 +6,6 @@ import {
   LayoutDashboard,
   LogOut,
   LogIn,
-  User2,
   HeartHandshake,
 } from "lucide-react";
 import { AuthContext } from "../../../contexts/AuthContext";

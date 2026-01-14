@@ -15,7 +15,6 @@ import {
   Camera,
   AlertCircle,
 } from "lucide-react";
-import { updateProfile } from "firebase/auth";
 import useAuth from "../../../hooks/useAuth";
 import {
   getBloodGroups,
@@ -54,7 +53,7 @@ const validationRules = {
 
 const Register = () => {
   const navigate = useNavigate();
-  const { registerUser } = useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -167,14 +166,11 @@ const Register = () => {
         );
         photoURL = imageRes.data.data.url;
       }
-
-      // 3️⃣ Update firebase profile
-      await updateProfile(userCredential.user, {
+      await updateUserProfile({
         displayName: data.name,
         photoURL,
       });
 
-      // 4️⃣ Save full user info to backend
       const userInfo = {
         uid: userCredential.user.uid,
         name: data.name,
@@ -189,7 +185,7 @@ const Register = () => {
       };
 
       await axiosInstance.post("/users", userInfo);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Registration failed. Please try again.");
