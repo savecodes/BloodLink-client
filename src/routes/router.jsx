@@ -14,6 +14,7 @@ import DonationRequestDetails from "../pages/Dashboard/Shared/DonationRequestDet
 import EditDonationRequest from "../pages/Dashboard/Shared/EditDonationRequest/EditDonationRequest";
 import SearchDonors from "../pages/SearchDonorsPage/SearchDonors";
 import DonationsRequests from "../pages/DonationsRequestsPage/DonationsRequests";
+import AboutUs from "../pages/AboutUsPage/AboutUs";
 
 const router = createBrowserRouter([
   {
@@ -33,8 +34,8 @@ const router = createBrowserRouter([
         Component: DonationsRequests,
       },
       {
-        path: "/about",
-        Component: HomePage,
+        path: "/about-us",
+        Component: AboutUs,
       },
     ],
   },

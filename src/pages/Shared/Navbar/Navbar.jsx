@@ -15,7 +15,7 @@ const navLinks = [
   { label: "Home", to: "/" },
   { label: "Search Donors", to: "/search-donors" },
   { label: "Donation Requests", to: "/donations-requests" },
-  { label: "About Us", to: "/about" },
+  { label: "About Us", to: "/about-us" },
 ];
 
 const Navbar = () => {
@@ -97,7 +97,7 @@ const Navbar = () => {
 
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-3">
-          {isAuthenticated ? (
+          {loading ? null : isAuthenticated ? (
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -235,7 +235,7 @@ const Navbar = () => {
                   </button>
                 </div>
 
-                {isAuthenticated && (
+                {!loading && isAuthenticated && (
                   <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
                     <div className="h-12 w-12 rounded-full bg-linear-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold">
                       {user?.photoURL ? (
