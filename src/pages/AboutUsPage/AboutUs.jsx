@@ -72,9 +72,9 @@ const AboutUs = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 text-white py-12 sm:py-16 md:py-20 px-4">
+      <div className="bg-linear-to-r from-red-600 to-red-700 text-white py-12 sm:py-16 md:py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-2xl mb-4 sm:mb-6 backdrop-blur-sm">
             <Heart className="w-8 h-8 sm:w-10 sm:h-10" />
@@ -145,7 +145,7 @@ const AboutUs = () => {
               <img
                 src="https://images.unsplash.com/photo-1615461065929-4f8ffed6ca40?w=600&h=400&fit=crop"
                 alt="Blood donation"
-                className="w-full h-[300px] sm:h-[350px] md:h-[400px] object-cover"
+                className="w-full h-75 sm:h-87.5 md:h-100 object-cover"
               />
             </div>
             <div className="absolute -bottom-4 sm:-bottom-6 -left-4 sm:-left-6 bg-red-600 text-white p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-lg px-2">
@@ -197,7 +197,7 @@ const AboutUs = () => {
       {/* Mission & Vision Section */}
       <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16 md:py-20">
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
-          <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10">
+          <div className="bg-linear-to-br from-red-50 to-red-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10">
             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-red-600 text-white rounded-lg sm:rounded-xl mb-4 sm:mb-6">
               <Target className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
@@ -212,7 +212,7 @@ const AboutUs = () => {
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10">
+          <div className="bg-linear-to-br from-blue-50 to-blue-100 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10">
             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 text-white rounded-lg sm:rounded-xl mb-4 sm:mb-6">
               <Award className="w-6 h-6 sm:w-7 sm:h-7" />
             </div>
