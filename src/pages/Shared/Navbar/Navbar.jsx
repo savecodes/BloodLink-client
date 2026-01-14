@@ -8,18 +8,18 @@ import {
   LogIn,
   HeartHandshake,
 } from "lucide-react";
-import { AuthContext } from "../../../contexts/AuthContext";
-import { useState, useContext } from "react";
+import { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 
 const navLinks = [
   { label: "Home", to: "/" },
-  { label: "Search Donors", to: "/donors" },
-  { label: "Donation Requests", to: "/requests" },
+  { label: "Search Donors", to: "/search-donors" },
+  { label: "Donation Requests", to: "/donations-requests" },
   { label: "About Us", to: "/about" },
 ];
 
 const Navbar = () => {
-  const { user, logOut, loading } = useContext(AuthContext);
+  const { user, logOut, loading } = useAuth();
   const isAuthenticated = !!user && !loading;
   const navigate = useNavigate();
   const location = useLocation();
@@ -101,16 +101,23 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
               >
                 <div className="h-9 w-9 rounded-full bg-linear-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold text-sm">
-                  {user?.displayName?.charAt(0) ||
-                    user?.email?.charAt(0) ||
-                    "U"}
+                  {user?.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt={user.displayName || "User"}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white font-semibold text-sm">
+                      {user?.displayName?.charAt(0) ||
+                        user?.email?.charAt(0) ||
+                        "U"}
+                    </span>
+                  )}
                 </div>
-                <span className="text-sm font-medium text-gray-700">
-                  {user?.displayName?.split(" ")[0] || "User"}
-                </span>
               </button>
 
               {dropdownOpen && (
@@ -231,9 +238,19 @@ const Navbar = () => {
                 {isAuthenticated && (
                   <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
                     <div className="h-12 w-12 rounded-full bg-linear-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold">
-                      {user?.displayName?.charAt(0) ||
-                        user?.email?.charAt(0) ||
-                        "U"}
+                      {user?.photoURL ? (
+                        <img
+                          src={user.photoURL}
+                          alt={user.displayName || "User"}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-white font-semibold">
+                          {user?.displayName?.charAt(0) ||
+                            user?.email?.charAt(0) ||
+                            "U"}
+                        </span>
+                      )}
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">
@@ -276,7 +293,7 @@ const Navbar = () => {
                     {/* Sign In */}
                     <button
                       onClick={() => {
-                        navigate("/auth?mode=login");
+                        navigate("/login");
                         setIsOpen(false);
                       }}
                       className="w-full flex items-center justify-center gap-2 px-4 py-3 
@@ -292,7 +309,7 @@ const Navbar = () => {
                     {/* Join as Donor */}
                     <button
                       onClick={() => {
-                        navigate("/auth?mode=register");
+                        navigate("/register");
                         setIsOpen(false);
                       }}
                       className="w-full flex items-center justify-center gap-2 px-4 py-3 
