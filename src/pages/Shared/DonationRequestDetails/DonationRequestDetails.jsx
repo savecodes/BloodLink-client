@@ -59,7 +59,7 @@ const DonationRequestDetails = () => {
           {/* LEFT: Request Details */}
           <div className="lg:col-span-2 space-y-6">
             {/* Header Card */}
-            <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-5 sm:p-6 md:p-8 border border-gray-100">
+            <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-5 sm:p-6 md:p-8 border border-gray-100 space-y-8">
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
                 <div className="flex-1">
                   <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">

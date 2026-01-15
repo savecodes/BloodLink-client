@@ -7,14 +7,14 @@ import Register from "../pages/Auth/Register/Register";
 import NotFound from "../components/NotFound/NotFound";
 import DashboardLayout from "../layouts/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome/DashboardHome";
-import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
-import CreateDonationRequest from "../pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
-import MyRequests from "../pages/Dashboard/MyRequests/MyRequests";
 import EditDonationRequest from "../pages/Dashboard/Shared/EditDonationRequest/EditDonationRequest";
 import SearchDonors from "../pages/SearchDonorsPage/SearchDonors";
 import DonationsRequests from "../pages/DonationsRequestsPage/DonationsRequests";
 import AboutUs from "../pages/AboutUsPage/AboutUs";
 import DonationRequestDetails from "../pages/Shared/DonationRequestDetails/DonationRequestDetails";
+import MyProfile from "../pages/Dashboard/Shared/MyProfile/MyProfile";
+import CreateDonationRequest from "../pages/Dashboard/Shared/CreateDonationRequest/CreateDonationRequest";
+import MyRequests from "../pages/Dashboard/Shared/MyRequests/MyRequests";
 
 const router = createBrowserRouter([
   {
@@ -78,11 +78,11 @@ const router = createBrowserRouter([
           },
           {
             path: "details/:id",
-            Component: DonationRequestDetails, // VIEW
+            Component: DonationRequestDetails,
           },
           {
             path: "edit/:id",
-            Component: EditDonationRequest, // EDIT
+            Component: EditDonationRequest,
           },
         ],
       },

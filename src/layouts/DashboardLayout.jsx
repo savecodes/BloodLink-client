@@ -1,21 +1,18 @@
-import { useState } from 'react';
-import { Link, Outlet, useNavigate, useLocation } from 'react-router';
+import { useState } from "react";
+import { Link, Outlet, useNavigate, useLocation } from "react-router";
 import {
   Heart,
-  LayoutDashboard,
-  User,
-  FileHeart,
-  PlusCircle,
-  Users,
-  DollarSign,
   LogOut,
   Menu,
   X,
   ChevronLeft,
   ChevronRight,
   HandHeart,
-} from 'lucide-react';
-import useAuth from '../hooks/useAuth';
+} from "lucide-react";
+import useAuth from "../hooks/useAuth";
+import useRole from "../hooks/useRole";
+import { SIDEBAR_MENU } from "../services/sidebarMenu";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 const DashboardLayout = () => {
   const { user, logOut } = useAuth();
@@ -23,39 +20,26 @@ const DashboardLayout = () => {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [role, roleLoading] = useRole();
 
-  // Links based on user role
-  const donorLinks = [
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'Profile', href: '/dashboard/profile', icon: User },
-    { label: 'My Requests', href: '/dashboard/my-donation-requests', icon: FileHeart },
-    { label: 'Create Request', href: '/dashboard/create-donation-request', icon: PlusCircle },
-    { label: 'Make Donation', href: '/dashboard/funding', icon: HandHeart },
-  ];
-
-  const adminLinks = [
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'All Users', href: '/dashboard/all-users', icon: Users },
-    { label: 'All Requests', href: '/dashboard/all-blood-donation-request', icon: FileHeart },
-    { label: 'Content Management', href: '/dashboard/content-management', icon: DollarSign },
-  ];
-
-  const links = user?.role === 'admin' ? adminLinks : donorLinks;
+  const links = SIDEBAR_MENU[role] || [];
 
   const handleLogout = async () => {
     try {
       await logOut();
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
 
   const getRoleBadgeColor = (role) => {
-    if (role === 'admin') return 'bg-purple-100 text-purple-700';
-    if (role === 'donor') return 'bg-red-100 text-red-700';
-    return 'bg-gray-100 text-gray-700';
+    if (role === "admin") return "bg-purple-100 text-purple-700";
+    if (role === "donor") return "bg-red-100 text-red-700";
+    return "bg-gray-100 text-gray-700";
   };
+
+  if (roleLoading) <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -63,7 +47,7 @@ const DashboardLayout = () => {
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-40 flex items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
           <Heart className="h-7 w-7 text-red-600 fill-red-600" />
-          <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+          <span className="text-xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
             BloodLink
           </span>
         </Link>
@@ -82,7 +66,7 @@ const DashboardLayout = () => {
       {/* Sidebar - Desktop */}
       <aside
         className={`hidden lg:flex flex-col fixed left-0 top-0 h-screen bg-white border-r border-gray-200 transition-all duration-300 z-40 ${
-          isCollapsed ? 'w-20' : 'w-64'
+          isCollapsed ? "w-20" : "w-64"
         }`}
       >
         {/* Header */}
@@ -99,7 +83,7 @@ const DashboardLayout = () => {
             <>
               <Link to="/" className="flex items-center gap-2 flex-1">
                 <Heart className="h-7 w-7 text-red-600 fill-red-600" />
-                <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
                   BloodLink
                 </span>
               </Link>
@@ -131,13 +115,15 @@ const DashboardLayout = () => {
                   to={link.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                     isActive
-                      ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-md'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  } ${isCollapsed ? 'justify-center' : ''}`}
-                  title={isCollapsed ? link.label : ''}
+                      ? "bg-linear-to-r from-red-600 to-pink-600 text-white shadow-md"
+                      : "text-gray-700 hover:bg-gray-100"
+                  } ${isCollapsed ? "justify-center" : ""}`}
+                  title={isCollapsed ? link.label : ""}
                 >
-                  <Icon className="h-5 w-5 flex-shrink-0" />
-                  {!isCollapsed && <span className="font-medium">{link.label}</span>}
+                  <Icon className="h-5 w-5 shrink-0" />
+                  {!isCollapsed && (
+                    <span className="font-medium">{link.label}</span>
+                  )}
                 </Link>
               );
             })}
@@ -146,21 +132,25 @@ const DashboardLayout = () => {
 
         {/* Footer */}
         <div className="border-t border-gray-200 p-4">
-          <div className={`flex items-center gap-3 mb-3 ${isCollapsed ? 'justify-center' : ''}`}>
-            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
-              {user?.displayName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+          <div
+            className={`flex items-center gap-3 mb-3 ${
+              isCollapsed ? "justify-center" : ""
+            }`}
+          >
+            <div className="h-10 w-10 rounded-full bg-linear-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold text-sm shrink-0">
+              {user?.displayName?.charAt(0) || user?.email?.charAt(0) || "U"}
             </div>
             {!isCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 truncate">
-                  {user?.displayName || 'User'}
+                  {user?.displayName || "User"}
                 </p>
                 <span
                   className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mt-1 ${getRoleBadgeColor(
-                    user?.role || 'donor'
+                    role || "donor"
                   )}`}
                 >
-                  {user?.role || 'donor'}
+                  {role || "donor"}
                 </span>
               </div>
             )}
@@ -205,7 +195,7 @@ const DashboardLayout = () => {
             <div className="h-16 border-b border-gray-200 flex items-center justify-between px-4">
               <Link to="/" className="flex items-center gap-2">
                 <Heart className="h-7 w-7 text-red-600 fill-red-600" />
-                <span className="text-xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                <span className="text-xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
                   BloodLink
                 </span>
               </Link>
@@ -233,11 +223,11 @@ const DashboardLayout = () => {
                       onClick={() => setIsMobileOpen(false)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
                         isActive
-                          ? 'bg-gradient-to-r from-red-600 to-pink-600 text-white shadow-md'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? "bg-linear-to-r from-red-600 to-pink-600 text-white shadow-md"
+                          : "text-gray-700 hover:bg-gray-100"
                       }`}
                     >
-                      <Icon className="h-5 w-5 flex-shrink-0" />
+                      <Icon className="h-5 w-5 shrink-0" />
                       <span className="font-medium">{link.label}</span>
                     </Link>
                   );
@@ -248,19 +238,21 @@ const DashboardLayout = () => {
             {/* Footer */}
             <div className="border-t border-gray-200 p-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="h-10 w-10 rounded-full bg-gradient-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">
-                  {user?.displayName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                <div className="h-10 w-10 rounded-full bg-linear-to-br from-red-600 to-pink-600 flex items-center justify-center text-white font-semibold text-sm shrink-0">
+                  {user?.displayName?.charAt(0) ||
+                    user?.email?.charAt(0) ||
+                    "U"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-900 truncate">
-                    {user?.displayName || 'User'}
+                    {user?.displayName || "User"}
                   </p>
                   <span
                     className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mt-1 ${getRoleBadgeColor(
-                      user?.role || 'donor'
+                      role || "donor"
                     )}`}
                   >
-                    {user?.role || 'donor'}
+                    {role || "donor"}
                   </span>
                 </div>
               </div>
@@ -279,7 +271,7 @@ const DashboardLayout = () => {
       {/* Main Content */}
       <main
         className={`transition-all duration-300 ${
-          isCollapsed ? 'lg:ml-20' : 'lg:ml-64'
+          isCollapsed ? "lg:ml-20" : "lg:ml-64"
         } pt-16 lg:pt-0`}
       >
         <div className="min-h-screen p-4 sm:p-6 lg:p-8">

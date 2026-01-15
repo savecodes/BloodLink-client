@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { Droplet, MapPin, Calendar, Clock, Eye } from "lucide-react";
+import { Droplet, MapPin, Calendar, Clock, Eye, MessageSquare } from "lucide-react";
 
 const DonationsRequests = () => {
   const axiosSecure = useAxiosSecure();
@@ -138,6 +138,13 @@ const DonationsRequests = () => {
                     <Calendar className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
                     <p className="text-sm sm:text-base text-gray-700">
                       Required by: {formatDate(donation.donationDate)}
+                    </p>
+                  </div>
+
+                  <div className="flex items-start gap-2 mb-5 sm:mb-6">
+                    <MessageSquare className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                    <p className="text-sm sm:text-base text-gray-700">
+                      Description: {donation.requestMessage}
                     </p>
                   </div>
 

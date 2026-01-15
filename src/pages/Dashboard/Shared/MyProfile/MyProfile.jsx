@@ -14,18 +14,22 @@ import {
 } from "lucide-react";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
-import useAuth from "../../../hooks/useAuth";
-import useAxios from "../../../hooks/useAxios";
+import useAuth from "../../../../hooks/useAuth";
+import useAxios from "../../../../hooks/useAxios";
 import {
   getBloodGroups,
   getDistricts,
   getUpazilasByDistrict,
-} from "../../../services/locationService";
-import { ACCOUNT_STATUS } from "../../../services/statusConfig";
+} from "../../../../services/locationService";
+import { ACCOUNT_STATUS } from "../../../../services/statusConfig";
+import useRole from "../../../../hooks/useRole";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 
 const MyProfile = () => {
   const { user, updateUserProfile } = useAuth();
   const axiosInstance = useAxios();
+  const [role, isRoleLoading] = useRole();
+  // console.log(role, isRoleLoading);
 
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -160,13 +164,8 @@ const MyProfile = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center min-h-screen items-center">
-        <Loader2 className="w-8 h-8 animate-spin text-red-600" />
-      </div>
-    );
-  }
+  if (isLoading) <LoadingSpinner />;
+  if (isRoleLoading) <LoadingSpinner />;
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -236,7 +235,7 @@ const MyProfile = () => {
                   {userData?.name}
                 </h2>
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                  {userData?.role === "admin" ? "Admin" : "Donor"}
+                  {role}
                 </span>
               </div>
               <p className="text-gray-600 mt-1">{userData?.email}</p>

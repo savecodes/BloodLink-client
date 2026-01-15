@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
+import useRole from "../../../hooks/useRole";
+import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -20,6 +22,7 @@ const navLinks = [
 
 const Navbar = () => {
   const { user, logOut, loading } = useAuth();
+  const [role, roleLoading] = useRole();
   const isAuthenticated = !!user && !loading;
   const navigate = useNavigate();
   const location = useLocation();
@@ -76,6 +79,10 @@ const Navbar = () => {
         </button>
       );
     });
+
+  if (roleLoading) {
+    <LoadingSpinner />;
+  }
 
   return (
     <nav className="w-full bg-white border-b border-gray-200 p-2">
@@ -135,7 +142,7 @@ const Navbar = () => {
                         {user?.email}
                       </p>
                       <span className="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-600 mt-2">
-                        {user?.role || "donor"}
+                        {role || "donor"}
                       </span>
                     </div>
                     <button
@@ -143,7 +150,7 @@ const Navbar = () => {
                         navigate("/dashboard");
                         setDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700 transition-colors"
+                      className="w-full text-left px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700 transition-colors cursor-pointer"
                     >
                       <LayoutDashboard className="h-4 w-4" />
                       Dashboard
@@ -153,7 +160,7 @@ const Navbar = () => {
                         navigate("/dashboard/profile");
                         setDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700 transition-colors"
+                      className="w-full text-left px-4 py-2.5 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700 transition-colors cursor-pointer"
                     >
                       <User className="h-4 w-4" />
                       Profile
@@ -164,7 +171,7 @@ const Navbar = () => {
                         handleLogout();
                         setDropdownOpen(false);
                       }}
-                      className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 flex items-center gap-2 text-sm font-medium transition-colors"
+                      className="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 flex items-center gap-2 text-sm font-medium transition-colors cursor-pointer"
                     >
                       <LogOut className="h-4 w-4" />
                       Log out
@@ -256,9 +263,7 @@ const Navbar = () => {
                       <p className="font-semibold text-gray-900">
                         {user?.displayName || "User"}
                       </p>
-                      <p className="text-sm text-gray-500">
-                        {user?.role || "donor"}
-                      </p>
+                      <p className="text-sm text-gray-500">{role || "donor"}</p>
                     </div>
                   </div>
                 )}

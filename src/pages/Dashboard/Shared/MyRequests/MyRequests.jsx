@@ -14,13 +14,13 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import useAuth from "../../../../hooks/useAuth";
 import { useRef } from "react";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
-import ErrorPage from "../../../components/ErrorPage/ErrorPage";
+import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import ErrorPage from "../../../../components/ErrorPage/ErrorPage";
 
 const MyRequests = () => {
   const navigate = useNavigate();
@@ -55,7 +55,6 @@ const MyRequests = () => {
       return res.data;
     },
     enabled: !loading && !!user?.email,
-    // keepPreviousData: true,
     placeholderData: (previousData) => previousData,
     staleTime: 5000,
   });
