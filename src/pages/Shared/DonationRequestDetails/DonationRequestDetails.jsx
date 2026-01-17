@@ -10,10 +10,12 @@ import {
   Mail,
   Heart,
   MessageSquare,
+  Wrench,
 } from "lucide-react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import ErrorPage from "../../../components/ErrorPage/ErrorPage";
+import toast from "react-hot-toast";
 
 const statusStyle = {
   pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
@@ -39,6 +41,12 @@ const DonationRequestDetails = () => {
     },
     enabled: !!id,
   });
+
+  const handleDonateClick = () => {
+    toast(" Donate feature is under development", {
+      icon: <Wrench />,
+    });
+  };
 
   if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorPage />;
@@ -173,7 +181,10 @@ const DonationRequestDetails = () => {
                 </div>
               </div>
 
-              <button className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-red-600 to-red-700 text-white py-3 sm:py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 text-sm sm:text-base cursor-pointer">
+              <button
+                onClick={handleDonateClick}
+                className="w-full flex items-center justify-center gap-2 bg-linear-to-r from-red-600 to-red-700 text-white py-3 sm:py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 text-sm sm:text-base cursor-pointer"
+              >
                 <Heart className="w-5 h-5" />
                 Donate Blood
               </button>

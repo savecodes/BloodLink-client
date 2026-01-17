@@ -166,7 +166,7 @@ const EditDonationRequest = () => {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-red-50/30 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+      <div>
         {/* Header */}
         <div className="mb-8">
           <button
@@ -186,7 +186,7 @@ const EditDonationRequest = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 space-y-8">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 pb-14 py-14 space-y-8">
             {/* Recipient */}
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <User className="w-5 h-5 text-red-600" />

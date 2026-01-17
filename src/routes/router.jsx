@@ -15,6 +15,7 @@ import DonationRequestDetails from "../pages/Shared/DonationRequestDetails/Donat
 import MyProfile from "../pages/Dashboard/Shared/MyProfile/MyProfile";
 import CreateDonationRequest from "../pages/Dashboard/Shared/CreateDonationRequest/CreateDonationRequest";
 import MyRequests from "../pages/Dashboard/Shared/MyRequests/MyRequests";
+import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         Component: Register,
+      },
+      {
+        path: "forgot-password",
+        Component: ForgetPassword,
       },
     ],
   },

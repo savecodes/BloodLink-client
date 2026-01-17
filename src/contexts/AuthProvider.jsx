@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -33,9 +34,14 @@ const AuthProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  // update Profile 
+  // update Profile
   const updateUserProfile = (profile) => {
     return updateProfile(auth.currentUser, profile);
+  };
+
+  // forget password
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
   };
 
   // observe user state
@@ -56,6 +62,7 @@ const AuthProvider = ({ children }) => {
     signInUser,
     logOut,
     updateUserProfile,
+    resetPassword,
   };
   return <AuthContext value={authInfo}>{children}</AuthContext>;
 };

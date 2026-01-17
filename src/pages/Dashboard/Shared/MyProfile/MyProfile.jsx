@@ -168,7 +168,7 @@ const MyProfile = () => {
   if (isRoleLoading) <LoadingSpinner />;
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-11/12 mx-auto">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
@@ -395,14 +395,14 @@ const MyProfile = () => {
                     type="button"
                     onClick={handleCancel}
                     disabled={updateProfileMutation.isLoading}
-                    className="flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <X className="w-5 h-5" /> Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updateProfileMutation.isLoading}
-                    className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {updateProfileMutation.isLoading ? (
                       <>
@@ -419,7 +419,7 @@ const MyProfile = () => {
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all"
+                  className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all cursor-pointer"
                 >
                   <User className="w-5 h-5" /> Edit Profile
                 </button>

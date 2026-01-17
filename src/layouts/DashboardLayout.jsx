@@ -13,6 +13,7 @@ import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
 import { SIDEBAR_MENU } from "../services/sidebarMenu";
 import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
+import LogoImg from "../assets/g_logo2.png";
 
 const DashboardLayout = () => {
   const { user, logOut } = useAuth();
@@ -22,7 +23,9 @@ const DashboardLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [role, roleLoading] = useRole();
 
-  const links = SIDEBAR_MENU[role] || [];
+
+  const safeRole = role || "donor";
+  const links = SIDEBAR_MENU[safeRole] || [];
 
   const handleLogout = async () => {
     try {
@@ -39,18 +42,23 @@ const DashboardLayout = () => {
     return "bg-gray-100 text-gray-700";
   };
 
-  if (roleLoading) <LoadingSpinner />;
+  if (roleLoading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-40 flex items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2">
-          <Heart className="h-7 w-7 text-red-600 fill-red-600" />
-          <span className="text-xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-            BloodLink
-          </span>
+          <img
+            src={LogoImg}
+            alt="BloodLink Logo"
+            className="h-8 sm:h-8 md:h-10 lg:h-8
+    w-auto
+    transition-transform
+    group-hover:scale-105"
+          />
         </Link>
+
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -82,10 +90,14 @@ const DashboardLayout = () => {
           ) : (
             <>
               <Link to="/" className="flex items-center gap-2 flex-1">
-                <Heart className="h-7 w-7 text-red-600 fill-red-600" />
-                <span className="text-xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                  BloodLink
-                </span>
+                <img
+                  src={LogoImg}
+                  alt="BloodLink Logo"
+                  className="h-8 sm:h-8 md:h-10 lg:h-8
+    w-auto
+    transition-transform
+    hover:scale-105"
+                />
               </Link>
               <button
                 onClick={() => setIsCollapsed(true)}
@@ -194,10 +206,14 @@ const DashboardLayout = () => {
             {/* Header */}
             <div className="h-16 border-b border-gray-200 flex items-center justify-between px-4">
               <Link to="/" className="flex items-center gap-2">
-                <Heart className="h-7 w-7 text-red-600 fill-red-600" />
-                <span className="text-xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
-                  BloodLink
-                </span>
+                <img
+                  src={LogoImg}
+                  alt="BloodLink Logo"
+                  className="h-8 sm:h-8 md:h-10 lg:h-8
+    w-auto
+    transition-transform
+    hover:scale-105"
+                />
               </Link>
               <button
                 onClick={() => setIsMobileOpen(false)}

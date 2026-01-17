@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import {
   Mail,
@@ -22,6 +22,7 @@ import {
   getUpazilasByDistrict,
 } from "../../../services/locationService";
 import useAxios from "../../../hooks/useAxios";
+import toast from "react-hot-toast";
 
 // Validation rules centralized
 const validationRules = {
@@ -53,13 +54,12 @@ const validationRules = {
 
 const Register = () => {
   const navigate = useNavigate();
-  const { registerUser, updateUserProfile } = useAuth();
+  const { registerUser, updateUserProfile, logOut } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-  // const [uploadingImage, setUploadingImage] = useState(false);
 
   const axiosInstance = useAxios();
 
@@ -68,6 +68,9 @@ const Register = () => {
   const [upazilas, setUpazilas] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [bloodGroups, setBloodGroups] = useState([]);
+
+  const location = useLocation();
+  const from = location.state?.from || "/";
 
   const {
     register,
@@ -185,10 +188,16 @@ const Register = () => {
       };
 
       await axiosInstance.post("/users", userInfo);
-      navigate("/dashboard");
+      await logOut();
+      toast.success("Registration successful! Please login to your account");
+      navigate("/login", {
+        replace: true,
+        state: { from },
+      });
     } catch (err) {
-      console.error(err);
-      setError("Registration failed. Please try again.");
+      // console.error(err);
+      // setError("Registration failed. Please try again.");
+      toast.error(err.message || "Registration failed. Please try again");
     } finally {
       setIsLoading(false);
     }

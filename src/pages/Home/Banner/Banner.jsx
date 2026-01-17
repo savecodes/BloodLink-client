@@ -38,7 +38,7 @@ const Banner = () => {
               className="group flex items-center justify-center gap-2 px-8 py-4 
                  rounded-full bg-linear-to-r from-red-600 to-pink-600 
                  font-semibold transition-all duration-300 
-                 hover:scale-105 hover:shadow-xl"
+                 hover:scale-105 hover:shadow-xl cursor-pointer"
             >
               <Heart className="w-5 h-5 fill-white" />
               Join as Donor
@@ -50,7 +50,7 @@ const Banner = () => {
               className="group flex items-center justify-center gap-2 px-8 py-4 
                  rounded-full border border-white/40 backdrop-blur 
                  transition-all duration-300 
-                 hover:bg-white/10 hover:scale-105"
+                 hover:bg-white/10 hover:scale-105 cursor-pointer"
             >
               <Search className="w-5 h-5" />
               Search Donors

@@ -1,6 +1,14 @@
 import { Link } from "react-router";
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
-import logoImg from "../../../assets/logo.png";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Instagram,
+  Twitter,
+} from "lucide-react";
+// import logoImg from "../../../assets/logo.png";
+import LogoImg from "../../../assets/g_logo2.png";
 
 const Footer = () => {
   return (
@@ -10,14 +18,25 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <Link to="/" className="flex items-center gap-2 mb-4">
+            <Link to="/" className="inline-block mb-4 group">
+              <img
+                src={LogoImg}
+                alt="BloodLink Logo"
+                className="h-8 sm:h-8 md:h-10 lg:h-8
+    w-auto
+    transition-transform
+    group-hover:scale-105"
+              />
+            </Link>
+
+            {/* <Link to="/" className="flex items-center gap-2 mb-4">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center">
                 <img src={logoImg} alt="" className="w-20 h-10" />
               </div>
               <span className="text-xl font-bold">
                 Blood<span className="text-red-500">Link</span>
               </span>
-            </Link>
+            </Link> */}
 
             <p className="text-sm text-white/60 leading-relaxed mb-6">
               Connecting blood donors with those in need. One donation can save

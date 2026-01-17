@@ -12,6 +12,7 @@ import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useRole from "../../../hooks/useRole";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
+import LogoImg from "../../../assets/g_logo2.png";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -86,16 +87,29 @@ const Navbar = () => {
 
   return (
     <nav className="w-full bg-white border-b border-gray-200 p-2">
-      <div className="max-w-11/12 mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="w-11/12 mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center group">
+          <img
+            src={LogoImg}
+            alt="BloodLink Logo"
+            className="h-8 sm:h-8 md:h-10 lg:h-8
+    w-auto
+    transition-transform
+    group-hover:scale-105"
+          />
+        </Link>
+
+        {/* <Link to="/" className="flex items-center gap-2 group">
           <div className="relative">
             <Heart className="h-7 w-7 text-red-600 fill-red-600 transition-transform group-hover:scale-110" />
           </div>
           <span className="text-2xl font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
             BloodLink
           </span>
-        </Link>
+          {/* <img src={LogoImg} alt="" className="h-20 w-40" /> 
+
+        </Link>*/}
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -115,7 +129,7 @@ const Navbar = () => {
                     <img
                       src={user.photoURL}
                       alt={user.displayName || "User"}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover rounded-full"
                     />
                   ) : (
                     <span className="text-white font-semibold text-sm">
@@ -229,10 +243,20 @@ const Navbar = () => {
               <div className="flex flex-col gap-6 p-6">
                 <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                   <div className="flex items-center gap-2">
-                    <Heart className="h-6 w-6 text-red-600 fill-red-600" />
+                    {/* <Heart className="h-6 w-6 text-red-600 fill-red-600" />
                     <span className="text-lg font-bold bg-linear-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
                       BloodLink
-                    </span>
+                    </span> */}
+                    <Link to="/" className="flex items-center group">
+                      <img
+                        src={LogoImg}
+                        alt="BloodLink Logo"
+                        className="h-8
+    w-auto
+    transition-transform
+    group-hover:scale-105 cursor-pointer"
+                      />
+                    </Link>
                   </div>
                   <button
                     onClick={() => setIsOpen(false)}
@@ -249,7 +273,7 @@ const Navbar = () => {
                         <img
                           src={user.photoURL}
                           alt={user.displayName || "User"}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover rounded-full"
                         />
                       ) : (
                         <span className="text-white font-semibold">

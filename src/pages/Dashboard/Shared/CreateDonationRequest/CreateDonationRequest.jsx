@@ -168,7 +168,7 @@ const CreateDonationRequest = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 bg-gray-50 min-h-screen">
+    <div className="px-4 py-6 bg-gray-50 min-h-screen">
       <div className="mb-8">
         <button
           onClick={() => navigate(-1)}

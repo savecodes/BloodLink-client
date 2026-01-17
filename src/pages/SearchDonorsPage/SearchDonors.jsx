@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { Search } from "lucide-react";
+import { Search, Wrench } from "lucide-react";
+import toast from "react-hot-toast";
 
 const SearchDonors = () => {
   const axiosSecure = useAxiosSecure();
@@ -77,6 +78,11 @@ const SearchDonors = () => {
     setSearchResults([]);
     setHasSearched(false);
   };
+  const handleContactDonor = () => {
+    toast("Contact Donor feature is under development", {
+      icon: <Wrench />,
+    });
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white py-12 px-4 sm:px-6 lg:px-8">
@@ -87,8 +93,8 @@ const SearchDonors = () => {
             Find Blood Donors
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Search for verified blood donors in your area. Filter by blood group and
-            location to find the right match.
+            Search for verified blood donors in your area. Filter by blood group
+            and location to find the right match.
           </p>
         </div>
 
@@ -104,7 +110,7 @@ const SearchDonors = () => {
                 name="bloodGroup"
                 value={formData.bloodGroup}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all bg-white text-gray-700"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all bg-white text-gray-700 cursor-pointer"
               >
                 <option value="">Any</option>
                 {bloodGroups.map((group) => (
@@ -124,7 +130,7 @@ const SearchDonors = () => {
                 name="district"
                 value={formData.district}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all bg-white text-gray-700"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all bg-white text-gray-700 cursor-pointer"
               >
                 <option value="">Any</option>
                 {districts.map((district) => (
@@ -145,7 +151,7 @@ const SearchDonors = () => {
                 value={formData.upazila}
                 onChange={handleChange}
                 disabled={!formData.district}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all bg-white text-gray-700 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all bg-white text-gray-700 disabled:bg-gray-100 disabled:cursor-not-allowed cursor-pointer"
               >
                 <option value="">Any</option>
                 {upazilas.map((upazila) => (
@@ -162,7 +168,7 @@ const SearchDonors = () => {
                 <button
                   onClick={handleSearch}
                   disabled={isSearching}
-                  className="w-full px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
                   <Search size={20} />
                   {isSearching ? "Searching..." : "Search"}
@@ -172,7 +178,7 @@ const SearchDonors = () => {
                   <button
                     onClick={handleSearch}
                     disabled={isSearching}
-                    className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     <Search size={20} />
                     {isSearching ? "Searching..." : "Search"}
@@ -180,7 +186,7 @@ const SearchDonors = () => {
                   <button
                     onClick={handleReset}
                     disabled={isSearching}
-                    className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   >
                     Reset
                   </button>
@@ -200,8 +206,8 @@ const SearchDonors = () => {
               Search for Donors
             </h3>
             <p className="text-gray-600 max-w-md mx-auto">
-              Use the filters above to find blood donors in your area. You can filter by
-              blood group, district, and upazila.
+              Use the filters above to find blood donors in your area. You can
+              filter by blood group, district, and upazila.
             </p>
           </div>
         )}
@@ -216,11 +222,12 @@ const SearchDonors = () => {
               No Donors Found
             </h3>
             <p className="text-gray-600 max-w-md mx-auto mb-6">
-              We couldn't find any donors matching your search criteria. Try adjusting your filters.
+              We couldn't find any donors matching your search criteria. Try
+              adjusting your filters.
             </p>
             <button
               onClick={handleReset}
-              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors"
+              className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
             >
               Reset Search
             </button>
@@ -257,7 +264,10 @@ const SearchDonors = () => {
                     </p>
                   </div>
                 </div>
-                <button className="w-full mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors">
+                <button
+                  onClick={handleContactDonor}
+                  className="w-full mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer"
+                >
                   Contact Donor
                 </button>
               </div>
