@@ -21,7 +21,7 @@ const DashboardLayout = () => {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [role, roleLoading] = useRole();
+  const [role, isRoleLoading] = useRole();
 
 
   const safeRole = role || "donor";
@@ -42,7 +42,7 @@ const DashboardLayout = () => {
     return "bg-gray-100 text-gray-700";
   };
 
-  if (roleLoading) return <LoadingSpinner />;
+  if (isRoleLoading) return <LoadingSpinner />;
 
   return (
     <div className="min-h-screen bg-gray-50">

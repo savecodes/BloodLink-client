@@ -16,6 +16,8 @@ import MyProfile from "../pages/Dashboard/Shared/MyProfile/MyProfile";
 import CreateDonationRequest from "../pages/Dashboard/Shared/CreateDonationRequest/CreateDonationRequest";
 import MyRequests from "../pages/Dashboard/Shared/MyRequests/MyRequests";
 import ForgetPassword from "../pages/Auth/ForgetPassword/ForgetPassword";
+import AllUsers from "../pages/Dashboard/Admin/AllUsers";
+import AllDonationsRequests from "../pages/Dashboard/Admin/AllDonationsRequests";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +76,15 @@ const router = createBrowserRouter([
         path: "profile",
         Component: MyProfile,
       },
+      {
+        path: "all-users",
+        Component: AllUsers,
+      },
+      {
+        path: "all-blood-donation-request",
+        Component: AllDonationsRequests,
+      },
+
       {
         path: "my-donation-requests",
         children: [
