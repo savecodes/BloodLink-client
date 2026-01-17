@@ -3,7 +3,7 @@ import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";
 
 const useRole = () => {
-  const [role, setRole] = useState(null); // ✅ put it here
+  const [role, setRole] = useState(null);
   const [isRoleLoading, setIsRoleLoading] = useState(true);
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();

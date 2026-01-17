@@ -11,7 +11,6 @@ import {
   FileText,
   AlertCircle,
   ArrowLeft,
-  Loader2,
 } from "lucide-react";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -19,11 +18,13 @@ import toast from "react-hot-toast";
 import useAuth from "../../../../hooks/useAuth";
 import { useNavigate } from "react-router";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import useUserStatus from "../../../../hooks/useUserStatus";
 
 const CreateDonationRequest = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { isBlocked, isStatusLoading } = useUserStatus();
 
   const [formData, setFormData] = useState({
     recipientName: "",
@@ -163,8 +164,33 @@ const CreateDonationRequest = () => {
     setErrors({});
   };
 
-  if (isLoading) {
-    return <LoadingSpinner/>
+  if (isLoading || isStatusLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isBlocked) {
+    return (
+      <div className="flex items-center justify-center min-h-[70vh] px-4">
+        <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border-t-4 border-red-500 text-center">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-12 h-12 text-red-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Account Blocked!
+          </h2>
+          <p className="text-gray-600 mb-6">
+            We're sorry, but your account has been restricted. You cannot create
+            new donation requests at this time.
+          </p>
+          <button
+            onClick={() => navigate("/")}
+            className="w-full py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors cursor-pointer"
+          >
+            Back to Home
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (

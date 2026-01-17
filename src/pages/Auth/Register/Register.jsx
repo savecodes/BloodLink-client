@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import {
@@ -16,12 +16,8 @@ import {
   AlertCircle,
 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
-import {
-  getBloodGroups,
-  getDistricts,
-  getUpazilasByDistrict,
-} from "../../../services/locationService";
-import useAxios from "../../../hooks/useAxios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 // Validation rules centralized
@@ -55,19 +51,12 @@ const validationRules = {
 const Register = () => {
   const navigate = useNavigate();
   const { registerUser, updateUserProfile, logOut } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
-
-  const axiosInstance = useAxios();
-
-  // Location data
-  const [districts, setDistricts] = useState([]);
-  const [upazilas, setUpazilas] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [bloodGroups, setBloodGroups] = useState([]);
 
   const location = useLocation();
   const from = location.state?.from || "/";
@@ -80,6 +69,7 @@ const Register = () => {
     formState: { errors, isValid },
   } = useForm({ mode: "onChange" });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const password = watch("password", "");
 
   // Password strength indicators
@@ -90,44 +80,34 @@ const Register = () => {
     hasLength: password.length >= 6,
   };
 
-  // Load blood groups & districts
-  useEffect(() => {
-    const loadInitialData = async () => {
-      try {
-        const [bg, dist] = await Promise.all([
-          getBloodGroups(axiosInstance),
-          getDistricts(axiosInstance),
-        ]);
-        setBloodGroups(bg);
-        setDistricts(dist);
-      } catch (err) {
-        console.error("Failed to load initial data", err);
-      }
-    };
-    loadInitialData();
-  }, [axiosInstance]);
+  // Fetch blood groups
+  const { data: bloodGroups = [] } = useQuery({
+    queryKey: ["blood-groups"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get("/blood-groups");
+      return data;
+    },
+  });
 
-  // if District change load upazila
-  useEffect(() => {
-    if (!selectedDistrict) {
-      setUpazilas([]);
-      return;
-    }
+  // Fetch districts
+  const { data: districts = [] } = useQuery({
+    queryKey: ["districts"],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get("/districts");
+      return data;
+    },
+  });
 
-    const loadUpazilas = async () => {
-      try {
-        const data = await getUpazilasByDistrict(
-          axiosInstance,
-          selectedDistrict
-        );
-        setUpazilas(data);
-      } catch (err) {
-        console.error("Failed to load upazilas", err);
-      }
-    };
-
-    loadUpazilas();
-  }, [selectedDistrict, axiosInstance]);
+  // Fetch upazilas based on selected district
+  const { data: upazilas = [] } = useQuery({
+    queryKey: ["upazilas", selectedDistrict],
+    queryFn: async () => {
+      if (!selectedDistrict) return [];
+      const { data } = await axiosSecure.get(`/upzillas/${selectedDistrict}`);
+      return data;
+    },
+    enabled: !!selectedDistrict,
+  });
 
   // Handle image selection
   const handleImageChange = (e) => {
@@ -149,58 +129,72 @@ const Register = () => {
     }
   };
 
+  // Registration mutation
+  const { mutateAsync: registerUserMutation, isPending: isLoading } =
+    useMutation({
+      mutationFn: async (data) => {
+        // 1️⃣ Register user with Firebase
+        const userCredential = await registerUser(data.email, data.password);
+
+        // 2️⃣ Upload image if exists
+        let photoURL = "";
+        if (imageFile) {
+          const formData = new FormData();
+          formData.append("image", imageFile);
+
+          const imageRes = await axiosSecure.post(
+            `https://api.imgbb.com/1/upload?key=${
+              import.meta.env.VITE_IMGBB_API_KEY
+            }`,
+            formData
+          );
+          photoURL = imageRes.data.data.url;
+        }
+
+        // 3️⃣ Update Firebase profile
+        await updateUserProfile({
+          displayName: data.name,
+          photoURL,
+        });
+
+        // 4️⃣ Get district name from districts array
+        const districtObj = districts.find((d) => d.id === data.district);
+        const districtName = districtObj ? districtObj.name : data.district;
+
+        // 5️⃣ Save user to database
+        const userInfo = {
+          uid: userCredential.user.uid,
+          name: data.name,
+          email: data.email,
+          bloodGroup: data.bloodGroup,
+          district: districtName, // Send district name instead of ID
+          upazila: data.upazila,
+          photoURL,
+          role: "donor",
+          status: "active",
+          createdAt: new Date(),
+        };
+
+        await axiosSecure.post("/users", userInfo);
+
+        return userInfo;
+      },
+      onSuccess: async () => {
+        await logOut();
+        toast.success("Registration successful! Please login to your account");
+        navigate("/login", {
+          replace: true,
+          state: { from },
+        });
+      },
+      onError: (err) => {
+        toast.error(err.message || "Registration failed. Please try again");
+        setError(err.message || "Registration failed. Please try again");
+      },
+    });
+
   const handleRegistration = async (data) => {
-    try {
-      setIsLoading(true);
-
-      const userCredential = await registerUser(data.email, data.password);
-
-      // 2️⃣ Upload image
-      let photoURL = "";
-      if (imageFile) {
-        const formData = new FormData();
-        formData.append("image", imageFile);
-
-        const imageRes = await axiosInstance.post(
-          `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMGBB_API_KEY
-          }`,
-          formData
-        );
-        photoURL = imageRes.data.data.url;
-      }
-      await updateUserProfile({
-        displayName: data.name,
-        photoURL,
-      });
-
-      const userInfo = {
-        uid: userCredential.user.uid,
-        name: data.name,
-        email: data.email,
-        bloodGroup: data.bloodGroup,
-        district: data.district,
-        upazila: data.upazila,
-        photoURL,
-        role: "donor",
-        status: "active",
-        createdAt: new Date(),
-      };
-
-      await axiosInstance.post("/users", userInfo);
-      await logOut();
-      toast.success("Registration successful! Please login to your account");
-      navigate("/login", {
-        replace: true,
-        state: { from },
-      });
-    } catch (err) {
-      // console.error(err);
-      // setError("Registration failed. Please try again.");
-      toast.error(err.message || "Registration failed. Please try again");
-    } finally {
-      setIsLoading(false);
-    }
+    await registerUserMutation(data);
   };
 
   return (
@@ -534,7 +528,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={!isValid || isLoading}
-              className="w-full h-12 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
+              className="w-full h-12 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 cursor-pointer"
             >
               {isLoading ? (
                 <>
