@@ -20,7 +20,6 @@ import AllUsers from "../pages/Dashboard/Admin/AllUsers";
 import AllDonationsRequests from "../pages/Dashboard/Admin/AllDonationsRequests";
 import MakeDonations from "../pages/Dashboard/Donor/MakeDonations";
 import PaymentSuccess from "../pages/Dashboard/Payment/PaymentSuccess";
-import PaymentCancel from "../pages/Dashboard/Payment/PaymentCancel";
 
 const router = createBrowserRouter([
   {
@@ -122,7 +121,10 @@ const router = createBrowserRouter([
         path: "make-donation",
         Component: MakeDonations,
       },
-
+      {
+        path: "payment-success",
+        Component: PaymentSuccess,
+      },
     ],
   },
   {
