@@ -5,7 +5,6 @@ import {
   PlusCircle,
   HandHeart,
   Users,
-  DollarSign,
 } from "lucide-react";
 
 export const SIDEBAR_MENU = {
