@@ -38,11 +38,9 @@ const Login = () => {
       toast.success("login successful!");
       navigate(from, { replace: true });
     } catch (err) {
-      // console.error("Login error:", err);
       setError(
-        err.message || "Failed to sign in. Please check your credentials."
+        err.message || "Failed to sign in. Please check your credentials.",
       );
-      // toast.error(err.message || "Login failed. Please try again");
     } finally {
       setIsLoading(false);
     }
@@ -182,7 +180,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
+              className="w-full h-12 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6 cursor-pointer"
             >
               {isLoading ? (
                 <>
@@ -193,18 +191,6 @@ const Login = () => {
                 "Sign In"
               )}
             </button>
-
-            {/* Divider */}
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">
-                  Or continue with
-                </span>
-              </div>
-            </div>
           </form>
 
           {/* Register Link */}

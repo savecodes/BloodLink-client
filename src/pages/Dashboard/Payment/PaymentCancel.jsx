@@ -130,7 +130,7 @@ const PaymentCancel = () => {
                   life-savers with those in urgent need.
                 </p>
 
-                <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-6 border border-red-100">
+                <div className="bg-linear-to-r from-red-50 to-pink-50 rounded-xl p-6 border border-red-100">
                   <h3 className="font-bold text-gray-900 mb-3">
                     Why Your Support Matters:
                   </h3>
