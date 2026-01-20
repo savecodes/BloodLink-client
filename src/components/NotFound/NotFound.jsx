@@ -67,7 +67,7 @@ const NotFound = () => {
           <div className="grid sm:grid-cols-3 gap-4">
             <button
               onClick={() => navigate("/")}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-red-50 transition-colors group"
+              className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-red-50 transition-colors group cursor-pointer"
             >
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Home className="w-6 h-6 text-red-600" />
@@ -77,7 +77,7 @@ const NotFound = () => {
 
             <button
               onClick={() => navigate("/donors")}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-red-50 transition-colors group"
+              className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-red-50 transition-colors group cursor-pointer"
             >
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Search className="w-6 h-6 text-red-600" />
@@ -89,7 +89,7 @@ const NotFound = () => {
 
             <button
               onClick={() => navigate("/requests")}
-              className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-red-50 transition-colors group"
+              className="flex flex-col items-center gap-2 p-4 rounded-xl hover:bg-red-50 transition-colors group cursor-pointer"
             >
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                 <FileHeart className="w-6 h-6 text-red-600" />

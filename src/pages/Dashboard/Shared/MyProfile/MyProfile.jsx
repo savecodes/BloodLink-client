@@ -49,7 +49,6 @@ const MyProfile = () => {
   // eslint-disable-next-line react-hooks/incompatible-library
   const selectedDistrict = watch("district");
 
-  /* ---------------- USER QUERY ---------------- */
   const {
     data: userData,
     isLoading,
@@ -63,7 +62,6 @@ const MyProfile = () => {
     },
   });
 
-  /* ---------------- STATIC QUERIES ---------------- */
   const { data: bloodGroups = [] } = useQuery({
     queryKey: ["bloodGroups"],
     queryFn: () => getBloodGroups(axiosInstance),
@@ -80,7 +78,6 @@ const MyProfile = () => {
     queryFn: () => getUpazilasByDistrict(axiosInstance, selectedDistrict),
   });
 
-  /* ---------------- UPDATE MUTATION ---------------- */
   const updateProfileMutation = useMutation({
     mutationFn: async (formData) => {
       let photoURL = userData.photoURL;
@@ -322,8 +319,8 @@ const MyProfile = () => {
                     required: "District is required",
                   })}
                   onChange={(e) => {
-                    setValue("district", e.target.value); // Update the form value
-                    setValue("upazila", ""); // Reset upazila
+                    setValue("district", e.target.value);
+                    setValue("upazila", "");
                   }}
                   disabled={!isEditing}
                   className={`w-full h-12 px-4 rounded-xl border-2 ${

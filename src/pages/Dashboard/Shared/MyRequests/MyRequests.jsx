@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import {
   Search,
@@ -16,11 +16,10 @@ import {
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import useAuth from "../../../../hooks/useAuth";
-import { useRef } from "react";
-import { useEffect } from "react";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import ErrorPage from "../../../../components/ErrorPage/ErrorPage";
+import Pagination from "../../../../components/Pagination/Pagination";
 
 const MyRequests = () => {
   const navigate = useNavigate();
@@ -31,15 +30,16 @@ const MyRequests = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Status");
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  const [page, setPage] = useState(1);
+  const limit = 6;
 
-  const {
-    data: donations = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["my-donations", user?.email, statusFilter, searchQuery],
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["my-donations", user?.email, statusFilter, searchQuery, page],
     queryFn: async () => {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams({
+        page,
+        limit,
+      });
 
       if (statusFilter !== "All Status") {
         params.append("status", statusFilter.toLowerCase().replace(" ", ""));
@@ -50,16 +50,17 @@ const MyRequests = () => {
       }
 
       const res = await axiosSecure.get(
-        `/donations/user/${user.email}?${params.toString()}`
+        `/donations/user/${user.email}?${params.toString()}`,
       );
+
       return res.data;
     },
+    keepPreviousData: true,
     enabled: !loading && !!user?.email,
-    placeholderData: (previousData) => previousData,
-    staleTime: 5000,
   });
 
-  // console.log("Fetching donation ID:", donations);
+  const donations = data?.data || [];
+  const pagination = data?.pagination;
 
   const statusOptions = [
     "All Status",
@@ -107,9 +108,11 @@ const MyRequests = () => {
     };
   }, []);
 
-  const handleView = (id) => {
-    navigate(`/dashboard/my-donation-requests/details/${id}`);
-  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setPage(1), 0);
+    return () => clearTimeout(timeout);
+  }, [searchQuery, statusFilter]);
 
   const handleEdit = (id) => {
     navigate(`/dashboard/my-donation-requests/edit/${id}`);
@@ -125,6 +128,12 @@ const MyRequests = () => {
       queryClient.invalidateQueries({
         queryKey: ["my-donations"],
       });
+
+      // Adjust page if last item deleted
+      if (donations.length === 1 && page > 1) {
+        setPage(page - 1);
+      }
+
       toast.success("Your request has been deleted");
     },
     onError: (error) => {
@@ -303,9 +312,8 @@ const MyRequests = () => {
                   {/* Action Buttons */}
                   <div className="flex lg:flex-col gap-2 shrink-0">
                     <button
-                      onClick={() => handleView(request._id)}
-                      className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all  cursor-pointer"
-                      title="View Details"
+                      onClick={() => navigate(`details/${request._id}`)}
+                      className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all cursor-pointer"
                     >
                       <Eye className="w-4 h-4" />
                       <span className="lg:hidden">View</span>
@@ -330,6 +338,15 @@ const MyRequests = () => {
                 </div>
               </div>
             ))
+          )}
+
+          {/* Pagination */}
+          {pagination && (
+            <Pagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={setPage}
+            />
           )}
         </div>
       </div>

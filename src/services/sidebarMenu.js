@@ -31,7 +31,7 @@ export const SIDEBAR_MENU = {
       icon: FileHeart,
     },
   ],
-  Volunteer: [
+  volunteer: [
     {
       label: "Dashboard",
       href: "/dashboard",
@@ -46,16 +46,6 @@ export const SIDEBAR_MENU = {
       label: "All Requests",
       href: "/dashboard/all-blood-donation-request",
       icon: FileHeart,
-    },
-    {
-      label: "My Requests",
-      href: "/dashboard/my-donation-requests",
-      icon: FileHeart,
-    },
-    {
-      label: "Create Request",
-      href: "/dashboard/create-donation-request",
-      icon: PlusCircle,
     },
   ],
   donor: [
@@ -81,7 +71,7 @@ export const SIDEBAR_MENU = {
     },
     {
       label: "Make Donation",
-      href: "/dashboard/funding",
+      href: "/dashboard/make-donation",
       icon: HandHeart,
     },
   ],

@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useAuth from "../../../hooks/useAuth";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
-import { Users, FileHeart, DollarSign, Activity } from "lucide-react";
+import { FileHeart, DollarSign, Activity } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -19,24 +19,7 @@ import {
 } from "recharts";
 import { CustomTooltip } from "../../../services/CustomTooltip";
 
-// eslint-disable-next-line no-unused-vars
-const StatCard = ({ icon: Icon, label, value, color, bgColor }) => (
-  <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-100">
-    <div className="flex items-center gap-4">
-      <div
-        className={`w-14 h-14 rounded-xl flex items-center justify-center ${bgColor}`}
-      >
-        <Icon className={`w-7 h-7 ${color}`} />
-      </div>
-      <div>
-        <p className="text-sm text-gray-600 font-medium">{label}</p>
-        <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
-      </div>
-    </div>
-  </div>
-);
-
-const AdminDashboard = () => {
+const VolunteerDashboard = () => {
   const axiosSecure = useAxiosSecure();
   const { user, loading } = useAuth();
 
@@ -86,31 +69,6 @@ const AdminDashboard = () => {
           <p className="text-red-50 text-sm sm:text-base">
             Here's what's happening with your blood donation platform today
           </p>
-        </div>
-
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          <StatCard
-            icon={Users}
-            label="Total Users (Donors)"
-            value={stats?.totalUsers?.toLocaleString() || 0}
-            color="text-blue-600"
-            bgColor="bg-blue-100"
-          />
-          <StatCard
-            icon={FileHeart}
-            label="Total Donation Requests"
-            value={stats?.totalDonationRequests?.toLocaleString() || 0}
-            color="text-red-600"
-            bgColor="bg-red-100"
-          />
-          <StatCard
-            icon={DollarSign}
-            label="Total Funding"
-            value={`$${stats?.totalFunding?.toLocaleString() || 0}`}
-            color="text-green-600"
-            bgColor="bg-green-100"
-          />
         </div>
 
         {/* Charts Section */}
@@ -245,4 +203,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default VolunteerDashboard;

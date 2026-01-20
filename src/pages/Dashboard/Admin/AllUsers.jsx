@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import toast from "react-hot-toast";
+import Pagination from "../../../components/Pagination/Pagination";
 
 import {
   Search,
@@ -24,9 +25,8 @@ const AllUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
-  const usersPerPage = 10;
+  const usersPerPage = 6;
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -43,18 +43,22 @@ const AllUsers = () => {
     };
   }, [openDropdown]);
 
-  // Fetch users from backend with search
-  const { data: users = [], isLoading } = useQuery({
-    queryKey: ["users", searchTerm],
+  const { data, isLoading } = useQuery({
+    queryKey: ["users", currentPage, searchTerm],
     queryFn: async () => {
-      const { data } = await axiosSecure.get("/users", {
-        params: { search: searchTerm },
-      });
-      return data;
+      const params = {
+        page: currentPage,
+        limit: usersPerPage,
+        search: searchTerm,
+      };
+      const res = await axiosSecure.get("/users", { params });
+      return res.data;
     },
-    placeholderData: (previousData) => previousData,
-    staleTime: 5000,
+    keepPreviousData: true,
   });
+
+  const users = data?.data || [];
+  const totalPages = data?.pagination?.totalPages || 1;
 
   // roleMutation for update user role
   const roleMutation = useMutation({
@@ -126,13 +130,6 @@ const AllUsers = () => {
     return photoURL;
   };
 
-  // Pagination
-  const totalPages = Math.ceil(users.length / usersPerPage);
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
   const toggleDropdown = (userId) =>
     setOpenDropdown(openDropdown === userId ? null : userId);
 
@@ -181,15 +178,15 @@ const AllUsers = () => {
                 autoComplete="off"
               />
             </div>
-            {/* <div className="text-sm text-gray-600 whitespace-nowrap">
-              {users.length} user(s)
-            </div> */}
+            <div className="text-sm text-gray-600 whitespace-nowrap">
+              {data?.pagination?.total || 0} user(s)
+            </div>
           </div>
         </div>
 
         {/* Users List */}
         <div className="space-y-4">
-          {currentUsers.length === 0 ? (
+          {users.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
               <AlertCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-700 mb-2">
@@ -200,7 +197,7 @@ const AllUsers = () => {
               </p>
             </div>
           ) : (
-            currentUsers.map((user) => {
+            users.map((user) => {
               const photoURL = getPhotoURL(user.photoURL);
               return (
                 <div
@@ -224,7 +221,7 @@ const AllUsers = () => {
                               user.name?.charAt(0).toUpperCase() || "U";
                             e.target.parentNode.insertBefore(
                               fallback,
-                              e.target
+                              e.target,
                             );
                           }}
                         />
@@ -317,7 +314,7 @@ const AllUsers = () => {
                                     {role.charAt(0).toUpperCase() +
                                       role.slice(1)}
                                   </button>
-                                )
+                                ),
                             )}
                             <div className="border-t border-gray-200" />
                             {user.status !== "blocked" ? (
@@ -347,63 +344,11 @@ const AllUsers = () => {
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-            <p className="text-sm text-gray-600">
-              Showing {indexOfFirstUser + 1} to{" "}
-              {Math.min(indexOfLastUser, users.length)} of {users.length} users
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Previous
-              </button>
-              {[...Array(totalPages)].map((_, index) => {
-                const pageNumber = index + 1;
-                if (
-                  pageNumber === 1 ||
-                  pageNumber === totalPages ||
-                  (pageNumber >= currentPage - 1 &&
-                    pageNumber <= currentPage + 1)
-                ) {
-                  return (
-                    <button
-                      key={pageNumber}
-                      onClick={() => handlePageChange(pageNumber)}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                        currentPage === pageNumber
-                          ? "bg-red-600 text-white"
-                          : "border border-gray-300 text-gray-700 hover:bg-gray-50"
-                      }`}
-                    >
-                      {pageNumber}
-                    </button>
-                  );
-                } else if (
-                  pageNumber === currentPage - 2 ||
-                  pageNumber === currentPage + 2
-                ) {
-                  return (
-                    <span key={pageNumber} className="px-2 py-2 text-gray-500">
-                      ...
-                    </span>
-                  );
-                }
-                return null;
-              })}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 border border-gray-300 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
+        <Pagination
+          page={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
     </div>
   );

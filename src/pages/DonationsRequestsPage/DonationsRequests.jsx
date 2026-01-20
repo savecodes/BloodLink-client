@@ -3,19 +3,34 @@ import { useNavigate } from "react-router";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { Droplet, MapPin, Calendar, Clock, Eye, MessageSquare } from "lucide-react";
+import {
+  Droplet,
+  MapPin,
+  Calendar,
+  Clock,
+  Eye,
+  MessageSquare,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import Pagination from "../../components/Pagination/Pagination";
 
 const DonationsRequests = () => {
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  const [page, setPage] = useState(1);
+  const limit = 6;
 
-  const { data: donations = [], isLoading } = useQuery({
-    queryKey: ["pending-donations"],
+  const { data, isLoading } = useQuery({
+    queryKey: ["pending-donations", page],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/donations?status=pending`);
+      const params = new URLSearchParams({ page, limit });
+      const res = await axiosSecure.get(
+        `/donations?status=pending&${params.toString()}`,
+      );
       return res.data;
     },
+    keepPreviousData: true,
   });
 
   const { data: districts = [] } = useQuery({
@@ -26,9 +41,8 @@ const DonationsRequests = () => {
     },
   });
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const donations = data?.data || [];
+  const pagination = data?.pagination;
 
   const handleView = (id) => {
     if (!user) {
@@ -52,6 +66,15 @@ const DonationsRequests = () => {
     });
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => setPage(1), 0);
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (isLoading || loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="min-h-screen bg-linear-to-b from-gray-50 to-white py-8 sm:py-12 md:py-16">
       <div className="max-w-11/12 mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,9 +88,9 @@ const DonationsRequests = () => {
             donation can make a difference.
           </p>
         </div>
-        <p className="mb-4 text-sm text-gray-500">
-          {donations.length} pending requests
-        </p>
+        {/* <p className="mb-4 text-sm text-gray-500">
+          {donations.length} pending requests on this page
+        </p> */}
 
         {/* Empty State */}
         {donations.length === 0 && (
@@ -166,6 +189,14 @@ const DonationsRequests = () => {
               </div>
             ))}
           </div>
+        )}
+        {/* Pagination */}
+        {pagination && (
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            onPageChange={setPage}
+          />
         )}
       </div>
     </div>

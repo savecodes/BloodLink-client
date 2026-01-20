@@ -73,7 +73,6 @@ const CreateDonationRequest = () => {
       return res.data;
     },
     onSuccess: () => {
-      // console.log("Donation created:", data);
       setFormData({
         recipientName: "",
         bloodGroup: "",
@@ -89,7 +88,6 @@ const CreateDonationRequest = () => {
       navigate("/dashboard/my-donation-requests");
     },
     onError: () => {
-      // console.error(error);
       toast.error("Failed to submit donation request");
     },
   });
@@ -171,20 +169,20 @@ const CreateDonationRequest = () => {
   if (isBlocked) {
     return (
       <div className="flex items-center justify-center min-h-[70vh] px-4">
-        <div className="max-w-md w-full bg-white p-8 rounded-2xl shadow-xl border-t-4 border-red-500 text-center">
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <AlertCircle className="w-12 h-12 text-red-600" />
+        <div className="max-w-md w-full bg-white p-6 sm:p-8 rounded-2xl shadow-xl border-t-4 border-red-500 text-center">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <AlertCircle className="w-10 h-10 sm:w-12 sm:h-12 text-red-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
             Account Blocked!
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
             We're sorry, but your account has been restricted. You cannot create
             new donation requests at this time.
           </p>
           <button
             onClick={() => navigate("/")}
-            className="w-full py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors cursor-pointer"
+            className="w-full py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors cursor-pointer text-sm sm:text-base"
           >
             Back to Home
           </button>
@@ -194,348 +192,348 @@ const CreateDonationRequest = () => {
   }
 
   return (
-    <div className="px-4 py-6 bg-gray-50 min-h-screen">
-      <div className="mb-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-          <span className="font-medium">Back</span>
-        </button>
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-          Create Donation Request
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Fill in the details to request blood donation
-        </p>
-      </div>
-
-      <div className="space-y-8">
-        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-              <User className="w-5 h-5 text-red-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">
-                Requester Information
-              </h2>
-              <p className="text-sm text-gray-600">
-                Your contact information (auto-filled from your profile)
-              </p>
-            </div>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <User className="w-4 h-4 inline mr-1" /> Your Name
-              </label>
-              <input
-                type="text"
-                value={user?.displayName}
-                // defaultValue={user.displayName}
-                disabled
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-100 bg-gray-50 cursor-not-allowed text-gray-600"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <Mail className="w-4 h-4 inline mr-1" /> Your Email
-              </label>
-              <input
-                type="email"
-                // defaultValue={user.email}
-                value={user?.email}
-                disabled
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-100 bg-gray-50 cursor-not-allowed text-gray-600"
-              />
-            </div>
-          </div>
+    <div className="px-3 sm:px-4 lg:px-6 py-4 sm:py-6 bg-gray-50 min-h-screen">
+      <div>
+        <div className="mb-6 sm:mb-8">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-3 sm:mb-4 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="font-medium text-sm sm:text-base">Back</span>
+          </button>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+            Create Donation Request
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1 sm:mt-2">
+            Fill in the details to request blood donation
+          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-12">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-              <UserCircle className="w-5 h-5 text-purple-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">
-                Recipient Information
-              </h2>
-              <p className="text-sm text-gray-600">
-                Details about the person who needs blood
-              </p>
-            </div>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Recipient Name <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                name="recipientName"
-                value={formData.recipientName}
-                onChange={handleChange}
-                placeholder="Enter recipient's full name"
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all"
-              />
-              {errors.recipientName && (
-                <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.recipientName}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <Droplet className="w-4 h-4 inline mr-1" /> Blood Group Required{" "}
-                <span className="text-red-600">*</span>
-              </label>
-              <select
-                name="bloodGroup"
-                value={formData.bloodGroup}
-                onChange={handleChange}
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all appearance-none bg-white"
-              >
-                <option value="">Select blood group</option>
-                {bloodGroups.map((group) => (
-                  <option key={group} value={group}>
-                    {group}
-                  </option>
-                ))}
-              </select>
-              {errors.bloodGroup && (
-                <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.bloodGroup}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">
-                Hospital & Location
-              </h2>
-              <p className="text-sm text-gray-600">
-                Where the blood donation is needed
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <Building2 className="w-4 h-4 inline mr-1" /> Hospital Name{" "}
-                <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                name="hospitalName"
-                value={formData.hospitalName}
-                onChange={handleChange}
-                placeholder="Enter hospital name"
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all"
-              />
-              {errors.hospitalName && (
-                <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.hospitalName}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Full Address <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="text"
-                name="fullAddress"
-                value={formData.fullAddress}
-                onChange={handleChange}
-                placeholder="Enter complete address"
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all"
-              />
-              {errors.fullAddress && (
-                <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.fullAddress}
-                </p>
-              )}
-            </div>
-
-            <div className="grid sm:grid-cols-2 gap-6">
+        <div className="space-y-6 sm:space-y-8">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-red-100 flex items-center justify-center">
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
+              </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  <MapPin className="w-4 h-4 inline mr-1" /> District{" "}
-                  <span className="text-red-600">*</span>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                  Requester Information
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Your contact information (auto-filled from your profile)
+                </p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  <User className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Your Name
                 </label>
-                <select
-                  name="district"
-                  value={formData.district}
+                <input
+                  type="text"
+                  value={user?.displayName}
+                  disabled
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-100 bg-gray-50 cursor-not-allowed text-gray-600 text-sm sm:text-base"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  <Mail className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Your Email
+                </label>
+                <input
+                  type="email"
+                  value={user?.email}
+                  disabled
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-100 bg-gray-50 cursor-not-allowed text-gray-600 text-sm sm:text-base"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 space-y-8 sm:space-y-12">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                <UserCircle className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                  Recipient Information
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Details about the person who needs blood
+                </p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  Recipient Name <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="recipientName"
+                  value={formData.recipientName}
                   onChange={handleChange}
-                  className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all appearance-none bg-white"
-                >
-                  <option value="">Select district</option>
-                  {districts.map((district) => (
-                    <option key={district.id} value={district.id}>
-                      {district.name}
-                    </option>
-                  ))}
-                </select>
-                {errors.district && (
+                  placeholder="Enter recipient's full name"
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all text-sm sm:text-base"
+                />
+                {errors.recipientName && (
                   <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.district}
+                    {errors.recipientName}
                   </p>
                 )}
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  <MapPin className="w-4 h-4 inline mr-1" /> Upazila{" "}
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  <Droplet className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Blood Group Required{" "}
                   <span className="text-red-600">*</span>
                 </label>
                 <select
-                  name="upazila"
-                  value={formData.upazila}
+                  name="bloodGroup"
+                  value={formData.bloodGroup}
                   onChange={handleChange}
-                  disabled={!formData.district}
-                  className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all appearance-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed"
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all appearance-none bg-white text-sm sm:text-base"
                 >
-                  <option value="">Select upazila</option>
-                  {upazilas.map((upazila) => (
-                    <option key={upazila.id} value={upazila.name}>
-                      {upazila.name}
+                  <option value="">Select blood group</option>
+                  {bloodGroups.map((group) => (
+                    <option key={group} value={group}>
+                      {group}
                     </option>
                   ))}
                 </select>
-                {errors.upazila && (
+                {errors.bloodGroup && (
                   <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                     <AlertCircle className="w-3 h-3" />
-                    {errors.upazila}
+                    {errors.bloodGroup}
                   </p>
                 )}
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-green-600" />
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                  Hospital & Location
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Where the blood donation is needed
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">Date & Time</h2>
-              <p className="text-sm text-gray-600">
-                When the blood donation is needed
-              </p>
-            </div>
-          </div>
 
-          <div className="grid sm:grid-cols-2 gap-6">
+            <div className="space-y-4 sm:space-y-6">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  <Building2 className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Hospital Name{" "}
+                  <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="hospitalName"
+                  value={formData.hospitalName}
+                  onChange={handleChange}
+                  placeholder="Enter hospital name"
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all text-sm sm:text-base"
+                />
+                {errors.hospitalName && (
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.hospitalName}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  Full Address <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="fullAddress"
+                  value={formData.fullAddress}
+                  onChange={handleChange}
+                  placeholder="Enter complete address"
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all text-sm sm:text-base"
+                />
+                {errors.fullAddress && (
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.fullAddress}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> District{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <select
+                    name="district"
+                    value={formData.district}
+                    onChange={handleChange}
+                    className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all appearance-none bg-white text-sm sm:text-base"
+                  >
+                    <option value="">Select district</option>
+                    {districts.map((district) => (
+                      <option key={district.id} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.district && (
+                    <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.district}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                    <MapPin className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Upazila{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <select
+                    name="upazila"
+                    value={formData.upazila}
+                    onChange={handleChange}
+                    disabled={!formData.district}
+                    className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all appearance-none bg-white disabled:bg-gray-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                  >
+                    <option value="">Select upazila</option>
+                    {upazilas.map((upazila) => (
+                      <option key={upazila.id} value={upazila.name}>
+                        {upazila.name}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.upazila && (
+                    <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.upazila}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-100 flex items-center justify-center">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">Date & Time</h2>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  When the blood donation is needed
+                </p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  <Calendar className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Donation Date{" "}
+                  <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="date"
+                  name="donationDate"
+                  value={formData.donationDate}
+                  onChange={handleChange}
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all text-sm sm:text-base"
+                />
+                {errors.donationDate && (
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.donationDate}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                  <Clock className="w-3 h-3 sm:w-4 sm:h-4 inline mr-1" /> Donation Time{" "}
+                  <span className="text-red-600">*</span>
+                </label>
+                <input
+                  type="time"
+                  name="donationTime"
+                  value={formData.donationTime}
+                  onChange={handleChange}
+                  className="w-full h-10 sm:h-12 px-3 sm:px-4 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all text-sm sm:text-base"
+                />
+                {errors.donationTime && (
+                  <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.donationTime}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
+              </div>
+              <div>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+                  Request Details
+                </h2>
+                <p className="text-xs sm:text-sm text-gray-600">
+                  Additional information about the request
+                </p>
+              </div>
+            </div>
+
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <Calendar className="w-4 h-4 inline mr-1" /> Donation Date{" "}
-                <span className="text-red-600">*</span>
+              <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-1.5 sm:mb-2">
+                Request Message <span className="text-red-600">*</span>
               </label>
-              <input
-                type="date"
-                name="donationDate"
-                value={formData.donationDate}
+              <textarea
+                name="requestMessage"
+                value={formData.requestMessage}
                 onChange={handleChange}
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all"
-              />
-              {errors.donationDate && (
+                rows="5"
+                placeholder="Describe why you need blood donation, any urgency, medical condition, etc."
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all resize-none text-sm sm:text-base"
+              ></textarea>
+              {errors.requestMessage && (
                 <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
-                  {errors.donationDate}
+                  {errors.requestMessage}
                 </p>
               )}
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <Clock className="w-4 h-4 inline mr-1" /> Donation Time{" "}
-                <span className="text-red-600">*</span>
-              </label>
-              <input
-                type="time"
-                name="donationTime"
-                value={formData.donationTime}
-                onChange={handleChange}
-                className="w-full h-12 px-4 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all"
-              />
-              {errors.donationTime && (
-                <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
-                  {errors.donationTime}
-                </p>
-              )}
-            </div>
           </div>
 
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
-              <FileText className="w-5 h-5 text-orange-600" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-gray-900">
-                Request Details
-              </h2>
-              <p className="text-sm text-gray-600">
-                Additional information about the request
-              </p>
-            </div>
+          <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 sm:gap-4">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg sm:rounded-xl hover:bg-gray-50 transition-all cursor-pointer text-sm sm:text-base"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={donationMutation.isPending}
+              className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-lg sm:rounded-xl hover:shadow-lg transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+            >
+              {donationMutation.isPending ? "Submitting..." : "Submit Request"}
+            </button>
           </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Request Message <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              name="requestMessage"
-              value={formData.requestMessage}
-              onChange={handleChange}
-              rows="5"
-              placeholder="Describe why you need blood donation, any urgency, medical condition, etc."
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-red-500 focus:ring-4 focus:ring-red-200 focus:outline-none transition-all resize-none"
-            ></textarea>
-            {errors.requestMessage && (
-              <p className="mt-1 text-xs text-red-600 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors.requestMessage}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-4">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="w-full sm:w-auto px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={donationMutation.isPending}
-            className="w-full sm:w-auto px-8 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all cursor-pointer"
-          >
-            {donationMutation.isPending ? "Submitting..." : "Submit Request"}
-          </button>
         </div>
       </div>
     </div>

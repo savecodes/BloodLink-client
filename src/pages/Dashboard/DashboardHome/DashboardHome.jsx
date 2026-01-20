@@ -3,6 +3,7 @@ import UserDashboard from "../Donor/UserDashboard";
 import useRole from "../../../hooks/useRole";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import AdminDashboard from "../Admin/AdminDashboard";
+import VolunteerDashboard from "../Volunteer/VolunteerDashboard";
 
 const DashboardHome = () => {
   const [role, isRoleLoading] = useRole();
@@ -11,6 +12,7 @@ const DashboardHome = () => {
   return (
     <div>
       {role === "admin" && <AdminDashboard />}
+      {role === "volunteer" && <VolunteerDashboard />}
       {role === "donor" && <UserDashboard />}
     </div>
   );
