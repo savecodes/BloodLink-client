@@ -28,6 +28,7 @@ import PaymentCancel from "../pages/Dashboard/Payment/PaymentCancel";
 
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
+import VolunteerRoute from "./VolunteerRoute";
 
 const router = createBrowserRouter([
   {
@@ -100,9 +101,9 @@ const router = createBrowserRouter([
       {
         path: "all-blood-donation-request",
         element: (
-          <AdminRoute>
+          <VolunteerRoute>
             <Outlet />
-          </AdminRoute>
+          </VolunteerRoute>
         ),
         children: [
           {

@@ -15,7 +15,6 @@ import {
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useAuth from "../../../../hooks/useAuth";
-import useAxios from "../../../../hooks/useAxios";
 import {
   getBloodGroups,
   getDistricts,
@@ -24,12 +23,12 @@ import {
 import { ACCOUNT_STATUS } from "../../../../services/statusConfig";
 import useRole from "../../../../hooks/useRole";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 
 const MyProfile = () => {
   const { user, updateUserProfile } = useAuth();
-  const axiosInstance = useAxios();
+  const axiosInstance = useAxiosSecure();
   const [role, isRoleLoading] = useRole();
-  // console.log(role, isRoleLoading);
 
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -75,7 +74,12 @@ const MyProfile = () => {
   const { data: upazilas = [] } = useQuery({
     queryKey: ["upazilas", selectedDistrict],
     enabled: !!selectedDistrict,
-    queryFn: () => getUpazilasByDistrict(axiosInstance, selectedDistrict),
+    queryFn: () => {
+      // ✅ District name থেকে ID খুঁজে বের করুন
+      const districtObj = districts.find((d) => d.name === selectedDistrict);
+      if (!districtObj) return [];
+      return getUpazilasByDistrict(axiosInstance, districtObj.id);
+    },
   });
 
   const updateProfileMutation = useMutation({
@@ -90,7 +94,7 @@ const MyProfile = () => {
           `https://api.imgbb.com/1/upload?key=${
             import.meta.env.VITE_IMGBB_API_KEY
           }`,
-          imgData
+          imgData,
         );
 
         photoURL = imgRes.data.data.url;
@@ -161,8 +165,7 @@ const MyProfile = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  if (isLoading) <LoadingSpinner />;
-  if (isRoleLoading) <LoadingSpinner />;
+  if (isLoading || isRoleLoading) return <LoadingSpinner />;
 
   return (
     <div className="max-w-11/12 mx-auto">
@@ -330,7 +333,7 @@ const MyProfile = () => {
                   } focus:outline-none transition-all appearance-none disabled:cursor-not-allowed`}
                 >
                   {districts.map((district) => (
-                    <option key={district.id} value={district.id}>
+                    <option key={district.id} value={district.name}>
                       {district.name}
                     </option>
                   ))}

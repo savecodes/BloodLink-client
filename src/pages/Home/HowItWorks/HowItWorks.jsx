@@ -35,9 +35,9 @@ const HowItWorks = () => {
         {/* Steps Container */}
         <div className="flex flex-col lg:flex-row items-center justify-center gap-0 lg:gap-0">
           {steps.map((step, index) => (
-                <>
+            <>
               {/* Step Card */}
-              <div className="relative w-full max-w-sm lg:max-w-xs">
+              <div key={index} className="relative w-full max-w-sm lg:max-w-xs">
                 <div className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                   {/* Number */}
                   <div className="text-7xl sm:text-8xl font-bold text-red-100 mb-4">
@@ -77,7 +77,7 @@ const HowItWorks = () => {
                   </div>
                 </div>
               )}
-              </>
+            </>
           ))}
         </div>
       </div>
