@@ -80,7 +80,7 @@ Before you begin, ensure you have installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone <https://github.com/savecodes/BloodLink-client>
+git clone https://github.com/savecodes/BloodLink-client
 cd bloodlink-client
 ```
 
@@ -102,6 +102,9 @@ VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
 VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_firebase_messaging_sender_id
 VITE_FIREBASE_APP_ID=your_firebase_app_id
+
+# Image upload
+VITE_IMGBB_API_KEY=your_imagebb_api_key
 
 # Backend API URL
 VITE_API_URL=http://localhost:3000

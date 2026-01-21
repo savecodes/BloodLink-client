@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { Link, Outlet, useNavigate, useLocation } from "react-router";
 import {
-  Heart,
   LogOut,
   Menu,
   X,
   ChevronLeft,
   ChevronRight,
-  HandHeart,
 } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
@@ -22,7 +20,6 @@ const DashboardLayout = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [role, isRoleLoading] = useRole();
-
 
   const safeRole = role || "donor";
   const links = SIDEBAR_MENU[safeRole] || [];
@@ -159,7 +156,7 @@ const DashboardLayout = () => {
                 </p>
                 <span
                   className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mt-1 ${getRoleBadgeColor(
-                    role || "donor"
+                    role || "donor",
                   )}`}
                 >
                   {role || "donor"}
@@ -170,7 +167,7 @@ const DashboardLayout = () => {
           {!isCollapsed && (
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
             >
               <LogOut className="h-4 w-4" />
               Log out
@@ -265,7 +262,7 @@ const DashboardLayout = () => {
                   </p>
                   <span
                     className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full mt-1 ${getRoleBadgeColor(
-                      role || "donor"
+                      role || "donor",
                     )}`}
                   >
                     {role || "donor"}
@@ -274,7 +271,7 @@ const DashboardLayout = () => {
               </div>
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
               >
                 <LogOut className="h-4 w-4" />
                 Log out

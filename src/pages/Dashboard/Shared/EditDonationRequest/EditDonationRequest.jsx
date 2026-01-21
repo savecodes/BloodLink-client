@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -6,9 +6,7 @@ import {
   Save,
   Loader2,
   Calendar,
-  Clock,
   MapPin,
-  Hospital,
   User,
   Droplet,
   MessageSquare,
@@ -18,6 +16,7 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import ErrorPage from "../../../../components/ErrorPage/ErrorPage";
+import Swal from "sweetalert2";
 
 const EditDonationRequest = () => {
   const { id } = useParams();
@@ -37,8 +36,10 @@ const EditDonationRequest = () => {
     requestMessage: "",
   });
 
+  const [initialData, setInitialData] = useState(null);
   const [errors, setErrors] = useState({});
   const selectedDistrict = formData.district;
+  const initializedRef = useRef(false);
 
   // Fetch Blood Groups
   const { data: bloodGroups = [] } = useQuery({
@@ -58,7 +59,7 @@ const EditDonationRequest = () => {
     },
   });
 
-  // Fetch Upazilas based on selected district
+  // Fetch Upazilas
   const { data: upazilas = [] } = useQuery({
     queryKey: ["upazilas", selectedDistrict],
     queryFn: async () => {
@@ -68,7 +69,7 @@ const EditDonationRequest = () => {
     enabled: !!selectedDistrict,
   });
 
-  // Fetch existing donation data
+  // Fetch existing donation
   const {
     data: donation,
     isLoading,
@@ -82,26 +83,36 @@ const EditDonationRequest = () => {
     enabled: !!id,
   });
 
-  // Populate form when data loads (async to avoid cascading render warning)
+  // Populate form + store initial data
   useEffect(() => {
     if (donation) {
-      const timer = setTimeout(() => {
-        setFormData({
-          recipientName: donation.recipientName || "",
-          bloodGroup: donation.bloodGroup || "",
-          hospitalName: donation.hospitalName || "",
-          fullAddress: donation.fullAddress || "",
-          district: donation.district || "",
-          upazila: donation.upazila || "",
-          donationDate: donation.donationDate || "",
-          donationTime: donation.donationTime || "",
-          requestMessage: donation.requestMessage || "",
-        });
-      }, 0);
+      const cleanData = {
+        recipientName: donation.recipientName || "",
+        bloodGroup: donation.bloodGroup || "",
+        hospitalName: donation.hospitalName || "",
+        fullAddress: donation.fullAddress || "",
+        district: donation.district || "",
+        upazila: donation.upazila || "",
+        donationDate: donation.donationDate || "",
+        donationTime: donation.donationTime || "",
+        requestMessage: donation.requestMessage || "",
+      };
 
-      return () => clearTimeout(timer);
+
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormData(cleanData);
+      setInitialData(cleanData);
+      initializedRef.current = true;
     }
   }, [donation]);
+
+  const isFormChanged = () => {
+    if (!initialData) return false;
+
+    return Object.keys(initialData).some(
+      (key) => initialData[key] !== formData[key],
+    );
+  };
 
   // Update mutation
   const { mutate: updateDonation, isPending } = useMutation({
@@ -124,11 +135,13 @@ const EditDonationRequest = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Clear error for this field
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
 
-    // Reset upazila if district changes
-    if (name === "district") setFormData((prev) => ({ ...prev, upazila: "" }));
+    if (name === "district") {
+      setFormData((prev) => ({ ...prev, upazila: "" }));
+    }
   };
 
   const validateForm = () => {
@@ -148,17 +161,38 @@ const EditDonationRequest = () => {
       newErrors.donationTime = "Donation time is required";
     if (!formData.requestMessage.trim())
       newErrors.requestMessage = "Request message is required";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isFormChanged()) {
+      toast.error("You haven't changed anything");
+      return;
+    }
+
     if (!validateForm()) {
       toast.error("Please fill all required fields");
       return;
     }
-    updateDonation(formData);
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update this donation request?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, update",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      updateDonation(formData);
+    }
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -454,8 +488,15 @@ const EditDonationRequest = () => {
             </button>
             <button
               type="submit"
-              disabled={isPending}
-              className="w-full sm:w-auto px-8 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all flex items-center justify-center gap-2"
+              disabled={isPending || !isFormChanged()}
+              className={`w-full sm:w-auto px-8 py-3 font-semibold rounded-xl flex items-center justify-center gap-2 transition-all
+    bg-linear-to-r from-red-600 to-pink-600 text-white
+    ${
+      isPending || !isFormChanged()
+        ? "opacity-60 cursor-not-allowed hover:shadow-none"
+        : "cursor-pointer hover:shadow-lg"
+    }
+  `}
             >
               {isPending ? (
                 <>
