@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import ErrorPage from "../../../../components/ErrorPage/ErrorPage";
 import Pagination from "../../../../components/Pagination/Pagination";
+import Swal from "sweetalert2";
 
 const MyRequests = () => {
   const navigate = useNavigate();
@@ -108,7 +109,6 @@ const MyRequests = () => {
     };
   }, []);
 
-
   useEffect(() => {
     const timeout = setTimeout(() => setPage(1), 0);
     return () => clearTimeout(timeout);
@@ -142,8 +142,20 @@ const MyRequests = () => {
   });
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to delete this request?")) return;
-    await deleteRequest(id);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      await deleteRequest(id);
+    }
   };
 
   if (isLoading || loading) {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import {
   User,
@@ -24,6 +24,8 @@ import { ACCOUNT_STATUS } from "../../../../services/statusConfig";
 import useRole from "../../../../hooks/useRole";
 import LoadingSpinner from "../../../../components/LoadingSpinner/LoadingSpinner";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const MyProfile = () => {
   const { user, updateUserProfile } = useAuth();
@@ -35,6 +37,8 @@ const MyProfile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [initialData, setInitialData] = useState(null);
+  const initializedRef = useRef(false);
 
   const {
     register,
@@ -47,6 +51,10 @@ const MyProfile = () => {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const selectedDistrict = watch("district");
+  const watchedName = watch("name");
+  const watchedBloodGroup = watch("bloodGroup");
+  const watchedDistrict = watch("district");
+  const watchedUpazila = watch("upazila");
 
   const {
     data: userData,
@@ -75,7 +83,6 @@ const MyProfile = () => {
     queryKey: ["upazilas", selectedDistrict],
     enabled: !!selectedDistrict,
     queryFn: () => {
-      // ✅ District name থেকে ID খুঁজে বের করুন
       const districtObj = districts.find((d) => d.name === selectedDistrict);
       if (!districtObj) return [];
       return getUpazilasByDistrict(axiosInstance, districtObj.id);
@@ -112,14 +119,16 @@ const MyProfile = () => {
     },
 
     onSuccess: () => {
-      setSuccess("Profile updated successfully!");
+      toast.success("Profile updated successfully!");
       setIsEditing(false);
       setImageFile(null);
+      setError("");
+      setSuccess("");
       refetch();
     },
 
     onError: () => {
-      setError("Failed to update profile");
+      toast.error("Failed to update profile");
     },
   });
 
@@ -127,21 +136,58 @@ const MyProfile = () => {
   useEffect(() => {
     if (!userData) return;
 
-    reset({
-      name: userData.name,
-      bloodGroup: userData.bloodGroup,
-      district: userData.district,
-      upazila: userData.upazila,
-    });
+    const cleanData = {
+      name: userData.name || "",
+      bloodGroup: userData.bloodGroup || "",
+      district: userData.district || "",
+      upazila: userData.upazila || "",
+    };
 
+    reset(cleanData);
     setImagePreview(userData.photoURL);
+    setInitialData(cleanData);
+    initializedRef.current = true;
   }, [userData, reset]);
 
+  /* ---------------- CHECK IF FORM CHANGED ---------------- */
+  const isFormChanged = () => {
+    if (!initialData) return false;
+
+    const hasFormDataChanged =
+      initialData.name !== watchedName ||
+      initialData.bloodGroup !== watchedBloodGroup ||
+      initialData.district !== watchedDistrict ||
+      initialData.upazila !== watchedUpazila;
+
+    const hasImageChanged = imageFile !== null;
+
+    return hasFormDataChanged || hasImageChanged;
+  };
+
   /* ---------------- HANDLERS ---------------- */
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    if (!isFormChanged()) {
+      toast.error("You haven't changed anything");
+      return;
+    }
+
     setError("");
     setSuccess("");
-    updateProfileMutation.mutate({ ...data, imageFile });
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update your profile?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, update",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      updateProfileMutation.mutate({ ...data, imageFile });
+    }
   };
 
   const handleCancel = () => {
@@ -150,16 +196,25 @@ const MyProfile = () => {
     setError("");
     setSuccess("");
     setImagePreview(userData.photoURL);
+    
+    if (initialData) {
+      reset(initialData);
+    }
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!file.type.startsWith("image/"))
-      return setError("Only image files allowed");
+    if (!file.type.startsWith("image/")) {
+      toast.error("Only image files allowed");
+      return;
+    }
 
-    if (file.size > 5 * 1024 * 1024) return setError("Max image size is 5MB");
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Max image size is 5MB");
+      return;
+    }
 
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
@@ -401,8 +456,15 @@ const MyProfile = () => {
                   </button>
                   <button
                     type="submit"
-                    disabled={updateProfileMutation.isLoading}
-                    className="flex items-center gap-2 px-6 py-3 bg-linear-to-r from-red-600 to-pink-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    disabled={updateProfileMutation.isLoading || !isFormChanged()}
+                    className={`flex items-center gap-2 px-6 py-3 font-semibold rounded-xl transition-all
+                      bg-linear-to-r from-red-600 to-pink-600 text-white
+                      ${
+                        updateProfileMutation.isLoading || !isFormChanged()
+                          ? "opacity-60 cursor-not-allowed hover:shadow-none"
+                          : "cursor-pointer hover:shadow-lg"
+                      }
+                    `}
                   >
                     {updateProfileMutation.isLoading ? (
                       <>

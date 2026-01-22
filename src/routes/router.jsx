@@ -30,6 +30,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import VolunteerRoute from "./VolunteerRoute";
 import DonorGuidelines from "../pages/Shared/Footer/Resources/DonorGuidelines";
+import BloodTypes from "../pages/Shared/Footer/Resources/bloodTypes";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,14 @@ const router = createBrowserRouter([
       {
         path: "donor-guidelines",
         Component: DonorGuidelines,
+      },
+      {
+        path: "donor-guidelines",
+        Component: DonorGuidelines,
+      },
+      {
+        path: "blood-types",
+        Component: BloodTypes,
       },
     ],
   },
