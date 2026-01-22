@@ -29,6 +29,7 @@ import PaymentCancel from "../pages/Dashboard/Payment/PaymentCancel";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import VolunteerRoute from "./VolunteerRoute";
+import DonorGuidelines from "../pages/Shared/Footer/Resources/DonorGuidelines";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "about-us",
         Component: AboutUs,
+      },
+      {
+        path: "donor-guidelines",
+        Component: DonorGuidelines,
       },
     ],
   },
