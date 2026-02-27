@@ -1,6 +1,7 @@
 import { Heart, Search, Users, Droplet, ArrowRight } from "lucide-react";
 import BannerImg from "../../../assets/BannerImg.png";
 import useAuth from "../../../hooks/useAuth";
+import { Link } from "react-router";
 
 const Banner = () => {
   const { user } = useAuth();
@@ -34,7 +35,8 @@ const Banner = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-14">
           {!user ? (
             // Guest user CTA
-            <button
+            <Link
+            to="login"
               className="group flex items-center justify-center gap-2 px-8 py-4 
                  rounded-full bg-linear-to-r from-red-600 to-pink-600 
                  font-semibold transition-all duration-300 
@@ -43,10 +45,11 @@ const Banner = () => {
               <Heart className="w-5 h-5 fill-white" />
               Join as Donor
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
           ) : (
             // Logged-in user CTA
-            <button
+            <Link
+            to="search-donors"
               className="group flex items-center justify-center gap-2 px-8 py-4 
                  rounded-full border border-white/40 backdrop-blur 
                  transition-all duration-300 
@@ -55,7 +58,7 @@ const Banner = () => {
               <Search className="w-5 h-5" />
               Search Donors
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
           )}
         </div>
       </div>

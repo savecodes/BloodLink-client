@@ -4,8 +4,9 @@ import axios from "axios";
 import useAuth from "./useAuth";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
-  withCredentials: true,
+  baseURL: "https://blood-link-server-iota.vercel.app",
+  // baseURL: "http://localhost:3000",
+  withCredentials: false,
 });
 
 const useAxiosSecure = () => {

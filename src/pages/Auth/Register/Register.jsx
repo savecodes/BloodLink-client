@@ -14,6 +14,7 @@ import {
   Loader2,
   Camera,
   AlertCircle,
+  Phone,
 } from "lucide-react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
@@ -33,6 +34,15 @@ const validationRules = {
       value: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
       message: "Enter a valid email",
     },
+  },
+  phone: {
+    required: "Phone number is required",
+    pattern: {
+      value: /^01[3-9]\d{8}$/,
+      message: "Enter a valid Bangladeshi number (e.g. 01702020202)",
+    },
+    validate: (v) =>
+      v.length === 11 || "Phone number must be exactly 11 digits",
   },
   password: {
     required: "Password is required",
@@ -146,7 +156,7 @@ const Register = () => {
             `https://api.imgbb.com/1/upload?key=${
               import.meta.env.VITE_IMGBB_API_KEY
             }`,
-            formData
+            formData,
           );
           photoURL = imageRes.data.data.url;
         }
@@ -161,13 +171,14 @@ const Register = () => {
         const districtObj = districts.find((d) => d.id === data.district);
         const districtName = districtObj ? districtObj.name : data.district;
 
-        // 5️⃣ Save user to database
+        // 5️⃣ Save user to database (phone added here)
         const userInfo = {
           uid: userCredential.user.uid,
           name: data.name,
           email: data.email,
+          phone: data.phone,
           bloodGroup: data.bloodGroup,
-          district: districtName, // Send district name instead of ID
+          district: districtName,
           upazila: data.upazila,
           photoURL,
           role: "donor",
@@ -344,6 +355,61 @@ const Register = () => {
                 <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
                   {errors.email.message}
+                </p>
+              )}
+            </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Phone Number <span className="text-red-600">*</span>
+              </label>
+              <div className="relative">
+                {/* Country code prefix — sits inside like the other icons */}
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 select-none pointer-events-none z-10">
+                  <span className="text-sm font-semibold text-gray-500">
+                    +880
+                  </span>
+                  <span className="w-px h-4 bg-gray-300 mx-0.5" />
+                </div>
+                <input
+                  type="tel"
+                  {...register("phone", validationRules.phone)}
+                  placeholder="1702020202"
+                  maxLength={11}
+                  inputMode="numeric"
+                  onKeyDown={(e) => {
+                    if (
+                      [
+                        "Backspace",
+                        "Delete",
+                        "Tab",
+                        "Escape",
+                        "Enter",
+                        "ArrowLeft",
+                        "ArrowRight",
+                        "ArrowUp",
+                        "ArrowDown",
+                      ].includes(e.key)
+                    )
+                      return;
+                    if (!/^\d$/.test(e.key)) e.preventDefault();
+                  }}
+                  className={`w-full h-12 pl-16 pr-4 rounded-xl border-2 ${
+                    errors.phone
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-200"
+                      : "border-gray-200 focus:border-red-500 focus:ring-red-200"
+                  } focus:outline-none focus:ring-4 transition-all`}
+                />
+              </div>
+              {errors.phone ? (
+                <p className="mt-1.5 text-xs text-red-600 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  {errors.phone.message}
+                </p>
+              ) : (
+                <p className="mt-1.5 text-xs text-gray-400">
+                  11-digit number starting with 01 — e.g. 01702020202
                 </p>
               )}
             </div>

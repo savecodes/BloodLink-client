@@ -11,6 +11,7 @@ import {
   X,
   AlertCircle,
   CheckCircle,
+  Phone,
 } from "lucide-react";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -79,15 +80,31 @@ const MyProfile = () => {
     queryFn: () => getDistricts(axiosInstance),
   });
 
+  // ─── FIX: upazilas fetch by district NAME (since we store name in DB) ─────────
+  // enabled only when both districts list is loaded AND a district is selected
   const { data: upazilas = [] } = useQuery({
     queryKey: ["upazilas", selectedDistrict],
-    enabled: !!selectedDistrict,
+    enabled: !!selectedDistrict && districts.length > 0,
     queryFn: () => {
       const districtObj = districts.find((d) => d.name === selectedDistrict);
       if (!districtObj) return [];
       return getUpazilasByDistrict(axiosInstance, districtObj.id);
     },
   });
+
+  // ─── FIX: re-set upazila AFTER upazilas list loads ───────────────────────────
+  // When a returning user's district is already set, upazila dropdown is empty
+  // until the upazilas array is fetched. Once it arrives, we re-apply the saved value.
+  useEffect(() => {
+    if (!initializedRef.current) return;
+    if (!initialData?.upazila) return;
+    if (upazilas.length === 0) return;
+
+    const match = upazilas.find((u) => u.name === initialData.upazila);
+    if (match) {
+      setValue("upazila", match.name);
+    }
+  }, [upazilas, initialData, setValue]);
 
   const updateProfileMutation = useMutation({
     mutationFn: async (formData) => {
@@ -196,7 +213,7 @@ const MyProfile = () => {
     setError("");
     setSuccess("");
     setImagePreview(userData.photoURL);
-    
+
     if (initialData) {
       reset(initialData);
     }
@@ -339,6 +356,29 @@ const MyProfile = () => {
                 />
                 <p className="mt-1 text-xs text-gray-500">
                   Email cannot be changed
+                </p>
+              </div>
+            </div>
+
+            {/* Phone — read-only, cannot be changed (same as email) */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <Phone className="w-4 h-4 inline mr-1" /> Phone Number
+                </label>
+                <div className="relative flex">
+                  <div className="flex items-center gap-1.5 h-12 px-3 bg-gray-50 border-2 border-r-0 border-gray-100 rounded-l-xl text-sm font-semibold text-gray-400 shrink-0 select-none">
+                    <span>+880</span>
+                  </div>
+                  <input
+                    type="tel"
+                    value={userData?.phone || "—"}
+                    disabled
+                    className="w-full h-12 px-4 rounded-r-xl border-2 border-gray-100 bg-gray-50 cursor-not-allowed text-gray-500"
+                  />
+                </div>
+                <p className="mt-1 text-xs text-gray-500">
+                  Phone number cannot be changed
                 </p>
               </div>
             </div>

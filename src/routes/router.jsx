@@ -33,6 +33,8 @@ import DonorGuidelines from "../pages/Shared/Footer/Resources/DonorGuidelines";
 import BloodTypes from "../pages/Shared/Footer/Resources/bloodTypes";
 import Faqs from "../pages/Shared/FAQ/Faqs";
 import ContactPage from "../pages/Shared/ContactPage/ContactPage";
+import PrivacyPolicy from "../pages/Home/PrivacyPolicy/PrivacyPolicy";
+import TermsAndConditions from "../pages/Home/TermsAndConditions/TermsAndConditions";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
       {
         path: "contact",
         Component: ContactPage,
+      },
+      {
+        path: "privacy",
+        Component: PrivacyPolicy,
+      },
+      {
+        path: "terms",
+        Component: TermsAndConditions,
       },
     ],
   },
